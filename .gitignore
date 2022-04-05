@@ -1,0 +1,8 @@
+.idea
+*.py[cod]
+logs/log*
+migrations
+*.db
+.vscode
+*.rdb
+.DS_Store
