@@ -40,7 +40,9 @@ redis-server
 python manage.py createsu -n admin -p 123456
 ```
 
-6. 运行项目
+6. 填写自己项目的 SECRET_KEY, 位于 `config.py` 中.
+
+7. 运行项目
 
 ```shell
 python manage.py runserver
