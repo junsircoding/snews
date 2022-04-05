@@ -40,7 +40,7 @@ redis-server
 python manage.py createsu -n admin -p 123456
 ```
 
-5. 运行项目
+6. 运行项目
 
 ```shell
 python manage.py runserver
