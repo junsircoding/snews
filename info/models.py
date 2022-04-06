@@ -1,7 +1,6 @@
 """
 ORM 模型
 """
-
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from info import constants
@@ -11,21 +10,26 @@ from . import db
 class BaseModel(object):
     """模型基类, 为每个模型补充创建时间与更新时间"""
     create_time = db.Column(db.DateTime, default=datetime.now)  # 记录的创建时间
-    update_time = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)  # 记录的更新时间
+    update_time = db.Column(
+        db.DateTime, default=datetime.now, onupdate=datetime.now)  # 记录的更新时间
 
 
 # 用户收藏表, 建立用户与其收藏新闻多对多的关系
 tb_user_collection = db.Table(
     "info_user_collection",
-    db.Column("user_id", db.Integer, db.ForeignKey("info_user.id"), primary_key=True),  # 新闻编号
-    db.Column("news_id", db.Integer, db.ForeignKey("info_news.id"), primary_key=True),  # 分类编号
+    db.Column("user_id", db.Integer, db.ForeignKey(
+        "info_user.id"), primary_key=True),  # 新闻编号
+    db.Column("news_id", db.Integer, db.ForeignKey(
+        "info_news.id"), primary_key=True),  # 分类编号
     db.Column("create_time", db.DateTime, default=datetime.now)  # 收藏创建时间
 )
 
 tb_user_follows = db.Table(
     "info_user_fans",
-    db.Column('follower_id', db.Integer, db.ForeignKey('info_user.id'), primary_key=True),  # 粉丝id
-    db.Column('followed_id', db.Integer, db.ForeignKey('info_user.id'), primary_key=True)  # 被关注人的id
+    db.Column('follower_id', db.Integer, db.ForeignKey(
+        'info_user.id'), primary_key=True),  # 粉丝id
+    db.Column('followed_id', db.Integer, db.ForeignKey(
+        'info_user.id'), primary_key=True)  # 被关注人的id
 )
 
 
@@ -49,7 +53,8 @@ class User(BaseModel, db.Model):
         default="MAN")
 
     # 当前用户收藏的所有新闻
-    collection_news = db.relationship("News", secondary=tb_user_collection, lazy="dynamic")  # 用户收藏的新闻
+    collection_news = db.relationship(
+        "News", secondary=tb_user_collection, lazy="dynamic")  # 用户收藏的新闻
     # 用户所有的粉丝, 添加了反向引用followed, 代表用户都关注了哪些人
     followers = db.relationship('User',
                                 secondary=tb_user_follows,
@@ -109,7 +114,8 @@ class News(BaseModel, db.Model):
     index_image_url = db.Column(db.String(256))  # 新闻列表图片路径
     category_id = db.Column(db.Integer, db.ForeignKey("info_category.id"))
     user_id = db.Column(db.Integer, db.ForeignKey("info_user.id"))  # 当前新闻的作者id
-    status = db.Column(db.Integer, default=0)  # 当前新闻状态 如果为0代表审核通过, 1代表审核中, -1代表审核不通过
+    # 当前新闻状态 如果为0代表审核通过, 1代表审核中, -1代表审核不通过
+    status = db.Column(db.Integer, default=0)
     reason = db.Column(db.String(256))  # 未通过原因, status = -1 的时候使用
     # 当前新闻的所有评论
     comments = db.relationship("Comment", lazy="dynamic")
@@ -158,10 +164,13 @@ class Comment(BaseModel, db.Model):
     __tablename__ = "info_comment"
 
     id = db.Column(db.Integer, primary_key=True)  # 评论编号
-    user_id = db.Column(db.Integer, db.ForeignKey("info_user.id"), nullable=False)  # 用户id
-    news_id = db.Column(db.Integer, db.ForeignKey("info_news.id"), nullable=False)  # 新闻id
+    user_id = db.Column(db.Integer, db.ForeignKey(
+        "info_user.id"), nullable=False)  # 用户id
+    news_id = db.Column(db.Integer, db.ForeignKey(
+        "info_news.id"), nullable=False)  # 新闻id
     content = db.Column(db.Text, nullable=False)  # 评论内容
-    parent_id = db.Column(db.Integer, db.ForeignKey("info_comment.id"))  # 父评论id
+    parent_id = db.Column(
+        db.Integer, db.ForeignKey("info_comment.id"))  # 父评论id
     parent = db.relationship("Comment", remote_side=[id])  # 自关联
     like_count = db.Column(db.Integer, default=0)  # 点赞条数
 
@@ -181,8 +190,10 @@ class Comment(BaseModel, db.Model):
 class CommentLike(BaseModel, db.Model):
     """评论点赞"""
     __tablename__ = "info_comment_like"
-    comment_id = db.Column("comment_id", db.Integer, db.ForeignKey("info_comment.id"), primary_key=True)  # 评论编号
-    user_id = db.Column("user_id", db.Integer, db.ForeignKey("info_user.id"), primary_key=True)  # 用户编号
+    comment_id = db.Column("comment_id", db.Integer, db.ForeignKey(
+        "info_comment.id"), primary_key=True)  # 评论编号
+    user_id = db.Column("user_id", db.Integer, db.ForeignKey(
+        "info_user.id"), primary_key=True)  # 用户编号
 
 
 class Category(BaseModel, db.Model):

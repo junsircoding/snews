@@ -2,7 +2,10 @@
 index 模块接口
 """
 
-from flask import render_template, request, jsonify, g, current_app
+from flask import (
+    render_template, jsonify,
+    request, g, current_app
+)
 from info import constants
 from info.models import News, Category
 from info.utils.common import user_login_data
