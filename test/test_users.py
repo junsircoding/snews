@@ -1,8 +1,10 @@
+"""
+添加测试用户
+"""
+
 import datetime
 import random
-
 from flask import app
-
 from info import db
 from info.models import User
 
@@ -10,7 +12,7 @@ from info.models import User
 def add_test_users():
     users = []
     now = datetime.datetime.now()
-    for num in range(0, 10000):
+    for num in range(0, 100):
         try:
             user = User()
             user.nick_name = "%011d" % num

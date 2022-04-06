@@ -1,16 +1,16 @@
 """
 manage.py 是程序启动的入口, 只关心启动的相关参数以及内容
 """
-
+from flask import app
 from flask_script import Manager
 from flask_migrate import Migrate
 # 这个 models 必须导入, flask_migrate 在迁移建表的时候需要
 from info import create_app, db, models
 from info.models import User
 
+
 # 通过指定的配置名字创建对应配置的 app
 app = create_app('development')
-
 # 将 app 与 db 关联
 migrate = Migrate(app, db)
 # 命令行管理器

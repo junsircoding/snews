@@ -11,6 +11,8 @@ pip install -r requirements.txt
 2. 迁移数据库
 
 ```shell
+# 设定 Flask App
+export FLASK_APP=manage
 # 生成迁移文件夹
 flask db init
 # 生成指定版本迁移文件
