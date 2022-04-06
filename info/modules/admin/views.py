@@ -7,7 +7,11 @@ import os
 import time
 import uuid
 from datetime import timedelta, datetime
-from flask import request, render_template, session, redirect, url_for, jsonify, current_app, abort
+from flask import (
+    render_template, redirect, url_for,
+    jsonify, abort, current_app, request,
+    session
+)
 from info import constants, db
 from info.models import User, Category, News
 from info.modules.admin import admin_blu

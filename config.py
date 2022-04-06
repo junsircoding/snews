@@ -20,9 +20,9 @@ class Config(object):
     REDIS_HOST = "127.0.0.1"
     REDIS_PORT = 6379
 
-    # Session保存配置
+    # Session 保存配置
     SESSION_TYPE = "redis"
-    # 开启session签名
+    # 开启 Session 签名
     SESSION_USE_SIGNER = True
     # 指定 Session 保存的 redis
     SESSION_REDIS = StrictRedis(host=REDIS_HOST, port=REDIS_PORT)
