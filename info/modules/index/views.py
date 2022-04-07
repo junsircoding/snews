@@ -17,6 +17,7 @@ from . import index_blu
 @index_blu.route('/')
 @user_login_data
 def index():
+    """首页"""
     user = g.user
     news_dict = News.query.order_by(News.clicks.desc()).limit(8).all()
     categories = Category.query.filter().all()
@@ -30,8 +31,8 @@ def index():
 
 @index_blu.route('/news_list')
 def news_list():
-    """
-    获取当前新闻数据
+    """获取当前新闻数据
+
     Returns:
     """
     # 1. 获取参数,并指定默认为"最新"分类,第一页,一页显示10条数据
@@ -53,13 +54,23 @@ def news_list():
     # 默认选择最新数据分类
     try:
         if cid == '1' or cid == '0':
-            paginate = News.query.filter(News.status == 0).order_by(News.id.desc()).paginate(page,
-                                                                                             constants.NEWS_PAGE_MAX_COUNT,
-                                                                                             False)
+            paginate = News.query.filter(
+                News.status == 0
+            ).order_by(
+                News.id.desc()
+            ).paginate(
+                page,
+                constants.NEWS_PAGE_MAX_COUNT,
+                False
+            )
         else:
-            paginate = News.query.filter(News.category_id == cid, News.status == 0).paginate(page,
-                                                                                             constants.NEWS_PAGE_MAX_COUNT,
-                                                                                             False)
+            paginate = News.query.filter(
+                News.category_id == cid, News.status == 0
+            ).paginate(
+                page,
+                constants.NEWS_PAGE_MAX_COUNT,
+                False
+            )
         news = paginate.items
         current_page = paginate.page
         total_page = paginate.pages
@@ -88,4 +99,5 @@ def news_list():
 
 @index_blu.route('/favicon.ico')
 def get_fav():
+    """获取页面图标"""
     return current_app.send_static_file('news/favicon.ico')

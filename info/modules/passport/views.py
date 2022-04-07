@@ -97,21 +97,22 @@ def register():
     data = request.get_json()
     mobile = data['mobile']
     password = data['password']
-    smscode = data['smscode']
+    # smscode = data['smscode']
     # 2.校验非空
-    if not all([mobile, password, smscode]):
+    # if not all([mobile, password, smscode]):
+    if not all([mobile, password]):
         return jsonify(errno=RETCODE.PARAMERR, errmsg='参数不完整')
-    # 3. 从redis中获取指定手机号对应的短信验证码
-    redis_cli = verify_code_cache()
-    sms_code_redis = redis_cli.get('sms_' + mobile)
-    if not sms_code_redis:
-        return jsonify(errno=RETCODE.PARAMERR, errmsg='短信验证码已过期')
-    sms_code_redis = bytes.decode(sms_code_redis)
+    # 3. 从 Redis 中获取指定手机号对应的短信验证码
+    # redis_cli = verify_code_cache()
+    # sms_code_redis = redis_cli.get('sms_' + mobile)
+    # if not sms_code_redis:
+    #     return jsonify(errno=RETCODE.PARAMERR, errmsg='短信验证码已过期')
+    # sms_code_redis = bytes.decode(sms_code_redis)
     # 4.校验验证码
-    if not sms_code_redis == smscode:
-        return jsonify(errno=RETCODE.PARAMERR, errmsg='短信验证码错误')
+    # if not sms_code_redis == smscode:
+    #     return jsonify(errno=RETCODE.PARAMERR, errmsg='短信验证码错误')
     # 5.强制过期
-    redis_cli.delete('sms_' + mobile)
+    # redis_cli.delete('sms_' + mobile)
     # 4. 初始化 user 模型, 并设置数据并添加到数据库
     user = User()
     user.nick_name = mobile

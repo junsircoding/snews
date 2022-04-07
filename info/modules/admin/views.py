@@ -29,6 +29,7 @@ def index():
 
 @admin_blu.route('/login', methods=["GET", "POST"])
 def login():
+    """登录"""
     if request.method == "GET":
         return render_template('admin/login.html')
 
@@ -77,6 +78,7 @@ def logout():
 
 @admin_blu.route('/user_count')
 def user_count():
+    """计算总人数"""
     # 总人数
     total_count = 0
     try:
@@ -145,6 +147,7 @@ def user_count():
 
 @admin_blu.route('/user_list')
 def user_list():
+    """用户列表"""
     page = request.args.get("p", 1)
 
     try:
@@ -189,6 +192,7 @@ def user_list():
 
 @admin_blu.route('/news_review')
 def news_review():
+    """新闻审核"""
     page = request.args.get("p", 1)
     # 获取搜索框关键字
     keywords = request.args.get("keywords", None)
@@ -238,6 +242,7 @@ def news_review():
 
 @admin_blu.route('/news_review_detail')
 def news_review_detail():
+    """新闻审核详情"""
     news_id = request.args.get('news_id')
     # 通过id查询新闻
     news = None
@@ -269,7 +274,6 @@ def news_review_detail():
 
 @admin_blu.route('/news_review_action', methods=["POST"])
 def news_review_action():
-    print('进来了。。。。。。。。')
     # 接受参数
     news_id = request.json.get("news_id")
     action = request.json.get("action")
