@@ -182,7 +182,7 @@ def add_news_comment():
         db.session.commit()
     except Exception as e:
         db.session.rollback()
-        print(e)
+        current_app.logger.info(e)
     # 返回响应
     return jsonify(errno=RETCODE.OK, errmsg='ok')
 

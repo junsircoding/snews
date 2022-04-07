@@ -4,7 +4,7 @@ import functools
 
 def do_index_class(index):
     """
-    自定义过滤器, 过滤点击排序html的class
+    自定义过滤器, 过滤点击排序 html 的 class
     :param index:
     Returns:
     """
@@ -19,6 +19,7 @@ def do_index_class(index):
 
 
 def user_login_data(f):
+    """检测用户登录装饰器"""
     @functools.wraps(f)
     def wrapper(*args, **kwargs):
         # 获取到当前登录用户的id

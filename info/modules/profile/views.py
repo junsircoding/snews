@@ -4,7 +4,7 @@ profile 模块接口
 
 import os
 import uuid
-from flask import render_template, g, redirect, abort, current_app
+from flask import render_template, redirect, abort, current_app, g
 from flask import jsonify, request, session
 from info import constants
 from info.models import db
@@ -17,31 +17,31 @@ from . import profile_blu
 @profile_blu.route('/info')
 @user_login_data
 def user_info():
+    """用户个人信息"""
     user = g.user
     if user:
-        # 如果用户登录则进入个人中心
+        # 如果用户已登录则进入个人中心
         # 返回用户数据
         return render_template('news/user.html', data={"user": g.user.to_dict()})
     else:
-        # 如果没有登录,跳转主页
+        # 如果没有登录, 跳转主页
         return redirect('/')
 
 
 @profile_blu.route('/base_info', methods=["GET", "POST"])
 @user_login_data
 def base_info():
-    """
-    用户基本信息
+    """用户基本信息
+
     Returns:
     """
     user = g.user
     # 不同的请求方式, 做不同的事情
-    # 如果是GET请求,返回用户数据
+    # 如果是 GET 请求, 返回用户数据
     if request.method == 'GET':
         if not user.signature:
             user.signature = '请输入个性签名^_^'
         return render_template('news/user_base_info.html', data={"user": user.to_dict()})
-
     else:
         # 修改用户数据
         # 获取传入参数
@@ -60,7 +60,6 @@ def base_info():
 
         })
         db.session.commit()
-
         # 返回
         return jsonify(errno=RETCODE.OK, errmsg='ok')
 
@@ -68,8 +67,10 @@ def base_info():
 @profile_blu.route('/pic_info', methods=["GET", "POST"])
 @user_login_data
 def pic_info():
+    """上传图片修改头像
+    """
     user = g.user
-    # 如果是GET请求,返回用户数据
+    # 如果是 GET 请求,返回用户数据
     if request.method == 'GET':
         return render_template('news/user_pic_info.html', data={"user_info": user.to_dict()})
     else:
@@ -77,17 +78,26 @@ def pic_info():
         # 1. 获取到上传的图片
         f = request.files['avatar']
         # 2. 上传头像
-        a = os.path.dirname(os.path.dirname(
-            os.path.dirname(os.path.abspath(__file__))))
-        b = '/static/news/image/'
-        c = str(uuid.uuid4())
-        avatar_url = a + b + c
+        info_dir_path = os.path.dirname(
+                os.path.dirname(
+                    os.path.dirname(
+                        os.path.abspath(__file__)
+                    )
+                )
+            )
+        images_path = '/static/news/images/'
+        avatar_file_name = str(uuid.uuid4())
+        avatar_url = info_dir_path + images_path + avatar_file_name
         f.save(avatar_url)
-        avatar_url = a[32:len(a):1] + b + c
+        current_app.logger.info(info_dir_path)
+        current_app.logger.info(images_path)
+        current_app.logger.info(avatar_file_name)
+        avatar_url = info_dir_path[32:len(info_dir_path):1] + images_path + avatar_file_name
+        current_app.logger.info(avatar_url)
         # 3. 保存头像地址
         User.query.filter_by(id=user.id).update({'avatar_url': avatar_url})
         db.session.commit()
-        # 拼接url并返回数据
+        # 拼接 URL 并返回数据
         data = {
             'avatar_url': avatar_url
         }
@@ -97,6 +107,8 @@ def pic_info():
 @profile_blu.route('/pass_info', methods=["GET", "POST"])
 @user_login_data
 def pass_info():
+    """修改密码
+    """
     user = g.user
     # GET请求,返回
     if request.method == "GET":
@@ -110,13 +122,18 @@ def pass_info():
     if not all([old_password, new_password, new_password2]):
         return jsonify(errno=RETCODE.PARAMERR, errmsg='参数不完整')
     # 3. 判断旧密码是否正确
-    if not old_password == user.password_hash:
+    if not user.check_password(old_password):
         return jsonify(errno=RETCODE.PARAMERR, errmsg='旧密码输入错误')
-    # 4. 设置新密码
-    user.password_hash = new_password
+    # 4. 确认密码
+    if new_password != new_password2:
+        return jsonify(errno=RETCODE.PARAMERR, errmsg='两次密码输入不一致')
+    # 5. 设置新密码
+    user.password = new_password
     db.session.commit()
+    # 6. 强制注销, 重新登录
+    session.clear()
     # 返回
-    return jsonify(errno=RETCODE.OK, errmsg='ok')
+    return jsonify(errno=RETCODE.OK, errmsg='修改成功, 请重新登录')
 
 
 @profile_blu.route('/collection')
@@ -132,7 +149,7 @@ def user_collection():
     try:
         page = int(page)
     except Exception as e:
-        current_app.logger.error(e)
+        current_app.logger.error(f"获取分页配置时发生异常: {e}")
         page = 1
     # 3. 查询用户指定页数的收藏的新闻
     # 进行分页数据查询
@@ -154,7 +171,6 @@ def user_collection():
         'current_page': page,
         'total_page': total_page
     }
-
     # 返回数据
     return render_template('news/user_collection.html', data=data)
 
@@ -391,5 +407,5 @@ def other_news_list():
         "current_page": current_page
     }
 
-    print(news_dict_list)
+    # print(news_dict_list)
     return jsonify(errno=RETCODE.OK, errmsg="OK", data=data)

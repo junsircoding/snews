@@ -199,7 +199,7 @@ function generateImageCode() {
     // 生成随机码
     imageCodeId = generateUUID();
     // 生成url
-    var url = '/passports/image_code?image_Code=' + imageCodeId;
+    var url = '/passports/image_code?imageCode=' + imageCodeId;
     // 给图片验证码img设置src属性
     $('.get_pic_code').attr('src', url)
 
