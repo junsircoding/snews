@@ -12,10 +12,10 @@ from flask import (
     jsonify, abort, current_app, request,
     session
 )
-from info.utils import constants, db
+from info import db
 from info.models import User, Category, News
 from info.modules.admin import admin_blu
-from info.utils.constants import RETCODE
+from info.utils.constants import *
 
 
 @admin_blu.route('/index')
@@ -176,7 +176,7 @@ def user_list():
             User.last_login.desc()
         ).paginate(
             page,
-            constants.ADMIN_USER_PAGE_MAX_COUNT,
+            ADMIN_USER_PAGE_MAX_COUNT,
             False
         )
         users = paginate.items
@@ -222,7 +222,7 @@ def news_review():
     try:
         paginate = News.query.filter(*filters) \
             .order_by(News.create_time.desc()) \
-            .paginate(page, constants.ADMIN_NEWS_PAGE_MAX_COUNT, False)
+            .paginate(page, ADMIN_NEWS_PAGE_MAX_COUNT, False)
 
         news_list = paginate.items
         current_page = paginate.page
@@ -345,7 +345,7 @@ def news_edit():
     try:
         paginate = News.query.filter(*filters) \
             .order_by(News.create_time.desc()) \
-            .paginate(page, constants.ADMIN_NEWS_PAGE_MAX_COUNT, False)
+            .paginate(page, ADMIN_NEWS_PAGE_MAX_COUNT, False)
 
         news_list = paginate.items
         current_page = paginate.page
@@ -454,7 +454,7 @@ def news_edit_detail():
         except Exception as e:
             current_app.logger.error(e)
             return jsonify(errno=RETCODE.THIRDERR, errmsg="上传图片错误")
-        news.index_image_url = constants.QINIU_DOMIN_PREFIX + key
+        news.index_image_url = QINIU_DOMIN_PREFIX + key
 
     # 设置相关数据
     news.title = title

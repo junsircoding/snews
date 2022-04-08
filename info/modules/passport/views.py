@@ -9,8 +9,7 @@ from info import db
 from info.models import User
 from info.utils.captcha.captcha import captcha
 from info.utils.common import redis_client
-from info.utils.constants import RETCODE
-from .constants import *
+from info.utils.constants import *
 from . import passport_blu
 
 

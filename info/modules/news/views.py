@@ -4,9 +4,9 @@ news 模块接口
 
 from flask import render_template, g, current_app
 from flask import jsonify, request
-from info import db, models
+from info import db
 from info.models import News, User, Comment, CommentLike
-from info.utils.constants import RETCODE
+from info.utils.constants import *
 from info.utils.common import user_login_data
 from . import news_blu
 

@@ -45,33 +45,3 @@ def user_login_data(f):
 def redis_client():
     """Redis 客户端"""
     return redis.Redis(**DevelopmentConfig.VERIFY_CODE_CACHE)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -9,7 +9,7 @@ from flask import (
 from info.utils import constants
 from info.models import News, Category
 from info.utils.common import user_login_data
-from info.utils.constants import RETCODE
+from info.utils.constants import *
 from . import index_blu
 
 

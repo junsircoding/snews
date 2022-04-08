@@ -1,6 +1,9 @@
 """
 常量文件
 """
+IMAGE_CODE_EXPIRES = 60 * 5 # 图片验证码过期时间
+SMS_CODE_EXPIRES = 60 * 5 # 短信验证码过期时间
+SMS_FLAG_EXPIRES = 60 * 5 # 短信验证码过期标志过期时间
 
 # 图片验证码Redis有效期,  单位：秒
 IMAGE_CODE_REDIS_EXPIRES = 300
