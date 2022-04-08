@@ -52,4 +52,4 @@ python manage.py runserver
 
 ## 运行效果
 
-![](./docs/index.png)
+![](./docs/img/index.png)
