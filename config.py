@@ -8,7 +8,7 @@ from redis import StrictRedis
 
 class Config(object):
     """项目配置"""
-    SECRET_KEY = "dfghjbuyjk%^&*uybnkjevmn#$%$%Yjkdsnvbdshvibadjvbajshbd"
+    SECRET_KEY = ""
 
     # 为数据库添加配置
     SQLALCHEMY_DATABASE_URI = 'sqlite:///app.db'

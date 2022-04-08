@@ -6,3 +6,4 @@ migrations
 .vscode
 *.rdb
 .DS_Store
+*.log
