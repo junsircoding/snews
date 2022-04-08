@@ -79,20 +79,18 @@ def pic_info():
         f = request.files['avatar']
         # 2. 上传头像
         info_dir_path = os.path.dirname(
+            os.path.dirname(
                 os.path.dirname(
-                    os.path.dirname(
-                        os.path.abspath(__file__)
-                    )
+                    os.path.abspath(__file__)
                 )
             )
+        )
         images_path = '/static/news/images/'
         avatar_file_name = str(uuid.uuid4())
         avatar_url = info_dir_path + images_path + avatar_file_name
         f.save(avatar_url)
-        current_app.logger.info(info_dir_path)
-        current_app.logger.info(images_path)
-        current_app.logger.info(avatar_file_name)
-        avatar_url = info_dir_path[32:len(info_dir_path):1] + images_path + avatar_file_name
+        avatar_url = info_dir_path[32:len(
+            info_dir_path):1] + images_path + avatar_file_name
         current_app.logger.info(avatar_url)
         # 3. 保存头像地址
         User.query.filter_by(id=user.id).update({'avatar_url': avatar_url})
@@ -139,17 +137,17 @@ def pass_info():
 @profile_blu.route('/collection')
 @user_login_data
 def user_collection():
+    """分页查询用户的收藏列表"""
     user = g.user
     # 1. 获取参数
-    # 当前页数
-    page = request.args.get('p')
+    page = request.args.get('p', 1) # 当前页数
     collections = None
     total_page = None
     # 2. 判断参数
     try:
         page = int(page)
-    except Exception as e:
-        current_app.logger.error(f"获取分页配置时发生异常: {e}")
+    except Exception as ex:
+        current_app.logger.error(f"获取分页配置时发生异常: {ex}")
         page = 1
     # 3. 查询用户指定页数的收藏的新闻
     # 进行分页数据查询
@@ -163,7 +161,7 @@ def user_collection():
         page = paginate.page
         total_page = paginate.pages
     except Exception as e:
-        current_app.logger.error(e)
+        current_app.logger.error(f"分页查询用户收藏列表异常: {e}")
 
     # 收藏列表
     data = {
@@ -178,17 +176,20 @@ def user_collection():
 @profile_blu.route('/news_release', methods=["GET", "POST"])
 @user_login_data
 def news_release():
-    # GET请求
+    """新闻分类"""
+    # GET 请求, 新建新闻时, 新闻分类的下拉框数据
     if request.method == 'GET':
         # 1. 加载新闻分类数据
         # 2. 移除最新分类
-        categories = Category.query.filter(Category.id != '1').all()
+        categories = Category.query.filter(
+            Category.id != '1',
+            Category.name != "最新").all()
         # 返回数据
         data = {
             'categories': categories
         }
         return render_template('news/user_news_release.html', data=data)
-
+    # POST 请求, 新建新闻
     # 1. 获取要提交的数据
     data = request.form
     content = data.get('content')
@@ -206,17 +207,22 @@ def news_release():
         return jsonify(errno=RETCODE.PARAMERR, errmsg='参数不完整')
     # 3.取到图片, 将图片上传到七牛云
     try:
-        a = os.path.dirname(os.path.dirname(
-            os.path.dirname(os.path.abspath(__file__))))
-        b = '/static/news/images/'
-        c = str(uuid.uuid4())
-        avatar_url = a + b + c
+        info_dir_path = os.path.dirname(
+            os.path.dirname(
+                os.path.dirname(
+                    os.path.abspath(__file__)
+                )
+            )
+        )
+        images_path = '/static/news/images/'
+        avatar_file_name = str(uuid.uuid4())
+        avatar_url = info_dir_path + images_path + avatar_file_name
         index_image.save(avatar_url)
-        index_image_url = a[32:len(a):1] + b + c
+        index_image_url = info_dir_path[32:len(
+            info_dir_path):1] + images_path + avatar_file_name
     except Exception as e:
         current_app.logger.error(e)
         return jsonify(errno=RETCODE.PARAMERR, errmsg="参数有误")
-
     # 保存数据
     new_news = News()
     new_news.title = title
@@ -228,7 +234,6 @@ def news_release():
     # 新闻状态,将新闻设置为1代表待审核状态
     new_news.status = constants.NEWS_NOT_CHECK
     new_news.user_id = g.user.id
-
     db.session.add(new_news)
     db.session.commit()
     # 返回
@@ -238,13 +243,14 @@ def news_release():
 @profile_blu.route('/news_list')
 @user_login_data
 def user_news_list():
+    """分页查询用户名下的新闻列表"""
     user = g.user
     page = request.args.get("p", 1)
 
     try:
         page = int(page)
-    except Exception as e:
-        current_app.logger.error(e)
+    except Exception as ex:
+        current_app.logger.error(f"获取分页配置时发生异常: {ex}")
         page = 1
 
     news = []
@@ -288,13 +294,14 @@ def user_news_list():
 @profile_blu.route('/user_follow')
 @user_login_data
 def user_follow():
+    """用户关注的新闻列表"""
     # 获取页数
     p = request.args.get("p", 1)
     try:
-        p = int(p)
-    except Exception as e:
-        p = 1
-        return jsonify(errno=RETCODE.PARAMERR, errmsg='出错')
+        page = int(page)
+    except Exception as ex:
+        current_app.logger.error(f"获取分页配置时发生异常: {ex}")
+        page = 1
 
     user = g.user
 
@@ -342,9 +349,10 @@ def other_info():
     # 查询指定id的用户信息
     other = None
     try:
-        other = User.query.get(other_id)
-    except Exception as e:
-        return jsonify(errno=RETCODE.PARAMERR, errmsg='出错')
+        page = int(page)
+    except Exception as ex:
+        current_app.logger.error(f"获取分页配置时发生异常: {ex}")
+        page = 1
 
     if not other:
         abort(404)
@@ -366,7 +374,6 @@ def other_info():
 @profile_blu.route('/other_news_list')
 def other_news_list():
     """返回指定用户的发布的新闻"""
-
     # 1. 取参数
     other_id = request.args.get("user_id")
     page = request.args.get("p", 1)
@@ -374,8 +381,9 @@ def other_news_list():
     # 2. 判断参数
     try:
         page = int(page)
-    except Exception as e:
-        return jsonify(errno=RETCODE.PARAMERR, errmsg="参数错误")
+    except Exception as ex:
+        current_app.logger.error(f"获取分页配置时发生异常: {ex}")
+        page = 1
 
     try:
         other = User.query.get(other_id)
@@ -406,6 +414,4 @@ def other_news_list():
         "total_page": total_page,
         "current_page": current_page
     }
-
-    # print(news_dict_list)
     return jsonify(errno=RETCODE.OK, errmsg="OK", data=data)
