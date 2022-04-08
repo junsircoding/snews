@@ -78,7 +78,7 @@ def logout():
 
 @admin_blu.route('/user_count')
 def user_count():
-    """计算总人数"""
+    """计算普通用户总人数"""
     # 总人数
     total_count = 0
     try:
@@ -94,14 +94,20 @@ def user_count():
     begin_mon_date = datetime.strptime(begin_mon_date_str, "%Y-%m-%d")
     try:
         mon_count = User.query.filter(
-            User.is_admin == False, User.create_time > begin_mon_date).count()
+            User.is_admin == False,
+            User.create_time > begin_mon_date
+        ).count()
     except Exception as e:
         current_app.logger.error(e)
 
     # 日新增数
     day_count = 0
     begin_day_date = datetime.strptime(
-        ('%d-%02d-%02d' % (t.tm_year, t.tm_mon, t.tm_mday)), "%Y-%m-%d")
+        (
+            '%d-%02d-%02d' % (t.tm_year, t.tm_mon, t.tm_mday)
+        ),
+        "%Y-%m-%d"
+    )
     try:
         day_count = User.query.filter(
             User.is_admin == False, User.create_time > begin_day_date).count()
@@ -123,8 +129,11 @@ def user_count():
         begin_date = today_date - timedelta(days=i)
         # 取到下一天的0点0分
         end_date = today_date - timedelta(days=(i - 1))
-        count = User.query.filter(User.is_admin == False, User.last_login >= begin_date,
-                                  User.last_login < end_date).count()
+        count = User.query.filter(
+            User.is_admin == False,
+            User.last_login >= begin_date,
+            User.last_login < end_date
+        ).count()
         active_count.append(count)
         active_time.append(begin_date.strftime('%Y-%m-%d'))
 
@@ -152,8 +161,8 @@ def user_list():
 
     try:
         page = int(page)
-    except Exception as e:
-        current_app.logger.error(e)
+    except Exception as ex:
+        current_app.logger.error(f"获取分页配置时发生异常: {ex}")
         page = 1
 
     users = []
@@ -198,8 +207,8 @@ def news_review():
     keywords = request.args.get("keywords", None)
     try:
         page = int(page)
-    except Exception as e:
-        current_app.logger.error(e)
+    except Exception as ex:
+        current_app.logger.error(f"获取分页配置时发生异常: {ex}")
         page = 1
 
     news_list = []
@@ -321,8 +330,8 @@ def news_edit():
 
     try:
         page = int(page)
-    except Exception as e:
-        current_app.logger.error(e)
+    except Exception as ex:
+        current_app.logger.error(f"获取分页配置时发生异常: {ex}")
         page = 1
 
     news_list = []
@@ -404,7 +413,7 @@ def news_edit_detail():
 
         return render_template('admin/news_edit_detail.html', data=data)
 
-    # 获取Post数据
+    # 获取 Post 数据
     news_id = request.form.get("news_id")
     title = request.form.get("title")
     digest = request.form.get("digest")

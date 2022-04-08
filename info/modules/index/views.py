@@ -36,11 +36,11 @@ def news_list():
     Returns:
     """
     # 1. 获取参数,并指定默认为"最新"分类,第一页,一页显示10条数据
-    page = request.args.get('page')
+    page = request.args.get('page', 1)
     try:
         page = int(page)
-    except Exception as e:
-        current_app.logger.error(e)
+    except Exception as ex:
+        current_app.logger.error(f"获取分页配置时发生异常: {ex}")
         page = 1
 
     cid = request.args.get('cid')

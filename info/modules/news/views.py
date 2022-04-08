@@ -24,7 +24,7 @@ def news_detail(news_id):
 
     # 获取当前登录用户对象
     user = g.user
-    # 按照点击次数前8排序
+    # 侧边栏的点击排行数据, 按照点击次数前 8 排序, 页面只展示 8 条
     news_dict = News.query.order_by(News.clicks.desc()).limit(8).all()
 
     # 进入详情页后要更新新闻的点击次数
@@ -80,24 +80,24 @@ def news_detail(news_id):
             comments.append(comment_item)
 
     # 查询新闻数据
-    news = News.query.filter(News.id == news_id).all()
+    news = News.query.filter(News.id == news_id).first()
     if news:
         news = {
             'comments_count': len(comment_list),
-            'title': news[0].title,
-            'create_time': news[0].create_time,
-            'source': news[0].source,
-            'id': news[0].id,
-            'content': news[0].content,
-            'author': User.query.filter(User.id == news[0].user_id).first().to_dict()
+            'title': news.title,
+            'create_time': news.create_time,
+            'source': news.source,
+            'id': news.id,
+            'content': news.content,
+            'author': User.query.filter(User.id == news.user_id).first().to_dict()
         }
     else:
         news = None
 
-    author_id = News.query.filter(News.id == news_id).all()[0].user_id
-    is_followed = User.query.filter(User.id == author_id)[0].followers.all()
+    author_id = News.query.filter(News.id == news_id).first().user_id
+    author_followers = User.query.filter(User.id == author_id).first().followers
     # 当前登录用户是否关注当前新闻作者
-    if is_followed:
+    if user in author_followers:
         is_followed = True
     else:
         is_followed = False
@@ -117,8 +117,8 @@ def news_detail(news_id):
 @news_blu.route('/news_collect', methods=['POST'])
 @user_login_data
 def news_collect():
-    """
-    新闻收藏
+    """新闻收藏
+
     Returns:
     """
     user = g.user
@@ -150,8 +150,8 @@ def news_collect():
 @news_blu.route('/news_comment', methods=['POST'])
 @user_login_data
 def add_news_comment():
-    """
-    添加评论
+    """添加评论
+
     Returns:
     """
     # 用户是否登录
@@ -190,8 +190,8 @@ def add_news_comment():
 @news_blu.route('/comment_like', methods=["POST"])
 @user_login_data
 def comment_like():
-    """
-    评论点赞
+    """评论点赞
+
     Returns:
     """
     # 用户是否登录
