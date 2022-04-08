@@ -1,12 +1,20 @@
-from flask import session, g
+"""
+服务工具
+"""
+
+import redis
 import functools
+from flask import session, g
+from config import DevelopmentConfig
 
 
 def do_index_class(index):
-    """
-    自定义过滤器, 过滤点击排序 html 的 class
-    :param index:
+    """自定义过滤器, 过滤点击排序 html 的 class
+
+    Args:
+        index(int):
     Returns:
+        (str): 
     """
     if index == 0:
         return "first"
@@ -32,6 +40,11 @@ def user_login_data(f):
         g.user = user
         return f(*args, **kwargs)
     return wrapper
+
+
+def redis_client():
+    """Redis 客户端"""
+    return redis.Redis(**DevelopmentConfig.VERIFY_CODE_CACHE)
 
 
 

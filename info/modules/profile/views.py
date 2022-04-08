@@ -6,11 +6,11 @@ import os
 import uuid
 from flask import render_template, redirect, abort, current_app, g
 from flask import jsonify, request, session
-from info import constants
+from info.utils import constants
 from info.models import db
 from info.models import User, Category, News, tb_user_collection
 from info.utils.common import user_login_data
-from info.utils.response_code import RETCODE
+from info.utils.constants import RETCODE
 from . import profile_blu
 
 

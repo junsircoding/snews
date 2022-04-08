@@ -12,10 +12,10 @@ from flask import (
     jsonify, abort, current_app, request,
     session
 )
-from info import constants, db
+from info.utils import constants, db
 from info.models import User, Category, News
 from info.modules.admin import admin_blu
-from info.utils.response_code import RETCODE
+from info.utils.constants import RETCODE
 
 
 @admin_blu.route('/index')

@@ -8,8 +8,8 @@ from flask import Response, request, session
 from info import db
 from info.models import User
 from info.utils.captcha.captcha import captcha
-from info.utils.redis_client import redis_client
-from info.utils.response_code import RETCODE
+from info.utils.common import redis_client
+from info.utils.constants import RETCODE
 from .constants import *
 from . import passport_blu
 

@@ -6,10 +6,10 @@ from flask import (
     render_template, jsonify,
     request, g, current_app
 )
-from info import constants
+from info.utils import constants
 from info.models import News, Category
 from info.utils.common import user_login_data
-from info.utils.response_code import RETCODE
+from info.utils.constants import RETCODE
 from . import index_blu
 
 

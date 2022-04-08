@@ -6,7 +6,7 @@ from flask import render_template, g, current_app
 from flask import jsonify, request
 from info import db, models
 from info.models import News, User, Comment, CommentLike
-from info.utils.response_code import RETCODE
+from info.utils.constants import RETCODE
 from info.utils.common import user_login_data
 from . import news_blu
 

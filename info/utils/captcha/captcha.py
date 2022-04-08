@@ -1,13 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
 # refer to `https://bitbucket.org/akorn/wheezy.captcha`
+
+"""
+生成图片验证码
+"""
 
 import random
 import string
 import os.path
 from io import BytesIO
-
 from PIL import Image
 from PIL import ImageFilter
 from PIL.ImageDraw import Draw
@@ -36,8 +38,8 @@ class Bezier:
         return result
 
     def make_bezier(self, n):
-        """ Bezier curves:
-            http://en.wikipedia.org/wiki/B%C3%A9zier_curve#Generalization
+        """Bezier curves:
+        http://en.wikipedia.org/wiki/B%C3%A9zier_curve#Generalization
         """
         try:
             return self.beziers[n]
@@ -68,12 +70,15 @@ class Captcha(object):
 
     def initialize(self, width=200, height=75, color=None, text=None, fonts=None):
         # self.image = Image.new('RGB', (width, height), (255, 255, 255))
-        self._text = text if text else random.sample(string.ascii_uppercase + string.ascii_uppercase + '3456789', 4)
+        self._text = text if text else random.sample(
+            string.ascii_uppercase + string.ascii_uppercase + '3456789', 4)
         self.fonts = fonts if fonts else \
-            [os.path.join(self._dir, 'fonts', font) for font in ['Arial.ttf', 'Georgia.ttf', 'actionj.ttf']]
+            [os.path.join(self._dir, 'fonts', font)
+             for font in ['Arial.ttf', 'Georgia.ttf', 'actionj.ttf']]
         self.width = width
         self.height = height
-        self._color = color if color else self.random_color(0, 200, random.randint(220, 255))
+        self._color = color if color else self.random_color(
+            0, 200, random.randint(220, 255))
 
     @staticmethod
     def random_color(start, end, opacity=None):
@@ -87,7 +92,8 @@ class Captcha(object):
     # draw image
 
     def background(self, image):
-        Draw(image).rectangle([(0, 0), image.size], fill=self.random_color(238, 255))
+        Draw(image).rectangle([(0, 0), image.size],
+                              fill=self.random_color(238, 255))
         return image
 
     @staticmethod
@@ -117,7 +123,8 @@ class Captcha(object):
         for i in range(number):
             x = int(random.uniform(dx, width))
             y = int(random.uniform(dy, height))
-            draw.line(((x, y), (x + level, y)), fill=color if color else self._color, width=level)
+            draw.line(((x, y), (x + level, y)),
+                      fill=color if color else self._color, width=level)
         return image
 
     def text(self, image, fonts, font_sizes=None, drawings=None, squeeze_factor=0.75, color=None):
@@ -201,11 +208,13 @@ class Captcha(object):
         """
         image = Image.new('RGB', (self.width, self.height), (255, 255, 255))
         image = self.background(image)
-        image = self.text(image, self.fonts, drawings=['warp', 'rotate', 'offset'])
+        image = self.text(image, self.fonts, drawings=[
+                          'warp', 'rotate', 'offset'])
         image = self.curve(image)
         image = self.noise(image)
         image = self.smooth(image)
-        name = "".join(random.sample(string.ascii_lowercase + string.ascii_uppercase + '3456789', 24))
+        name = "".join(random.sample(string.ascii_lowercase +
+                       string.ascii_uppercase + '3456789', 24))
         text = "".join(self._text)
         out = BytesIO()
         image.save(out, format=fmt)
@@ -216,6 +225,7 @@ class Captcha(object):
     def generate_captcha(self):
         self.initialize()
         return self.captcha("")
+
 
 captcha = Captcha.instance()
 
