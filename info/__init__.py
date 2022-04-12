@@ -53,6 +53,20 @@ def create_app(config_name: str = "development"):
 
     # TODO: 创建 Flask 对象
     app = Flask(__name__)
+    """
+    含有 ``app = Flask(__name__)`` 这段代码的文件所在目录就是这个项目的根目录
+    模板目录(templates)和静态文件目录(static)的位置, 默认就是以根目录为基准来寻找的, 如果要更改
+    需要自定义参数, ``app = Flask(__name__, static_folder="", template_folder="")``
+
+    以下是这两个参数的官方注释:
+    :param template_folder: the folder that contains the templates that should
+            be used by the application.  Defaults to
+            ``'templates'`` folder in the root path of the
+            application.
+    :param static_folder: The folder with static files that is served at
+            ``static_url_path``. Relative to the application ``root_path``
+            or an absolute path. Defaults to ``'static'``.
+    """
     # 加载配置
     app.config.from_object(config[config_name])
     # 初始化数据库
