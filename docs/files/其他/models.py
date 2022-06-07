@@ -1,3 +1,11 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# @Date        : 2022-06-07 14:44:24
+# @Author      : junsircoding
+# @File        : docs/files/其他/models.py
+# @Info        : 
+# @Last Edited : 2022-06-07 14:44:24
+
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 

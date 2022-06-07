@@ -1,3 +1,11 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# @Date        : 2022-06-07 14:44:24
+# @Author      : junsircoding
+# @File        : manage.py
+# @Info        : 
+# @Last Edited : 2022-06-07 14:44:24
+
 """
 manage.py 是程序启动的入口, 只关心启动的相关参数以及内容
 """

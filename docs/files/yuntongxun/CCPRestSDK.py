@@ -1,4 +1,11 @@
-# -*- coding: UTF-8 -*-
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# @Date        : 2022-06-07 14:44:24
+# @Author      : junsircoding
+# @File        : docs/files/yuntongxun/CCPRestSDK.py
+# @Info        : 
+# @Last Edited : 2022-06-07 14:44:24
+
 #  Copyright (c) 2014 The CCP project authors. All Rights Reserved.
 #
 #  Use of this source code is governed by a Beijing Speedtong Information Technology Co.,Ltd license

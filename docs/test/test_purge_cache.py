@@ -1,3 +1,11 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# @Date        : 2022-06-07 14:44:24
+# @Author      : junsircoding
+# @File        : docs/test/test_purge_cache.py
+# @Info        : 
+# @Last Edited : 2022-06-07 14:44:24
+
 """
 清除 __pycache__ 缓存
 """

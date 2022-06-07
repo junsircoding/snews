@@ -1,3 +1,11 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# @Date        : 2022-06-07 14:44:24
+# @Author      : junsircoding
+# @File        : docs/files/其他/constants.py
+# @Info        : 
+# @Last Edited : 2022-06-07 14:44:24
+
 # 图片验证码Redis有效期， 单位：秒
 IMAGE_CODE_REDIS_EXPIRES = 300
 
@@ -27,5 +35,3 @@ ADMIN_USER_PAGE_MAX_COUNT = 10
 
 # 管理员页面新闻每页多最数据条数
 ADMIN_NEWS_PAGE_MAX_COUNT = 10
-
-

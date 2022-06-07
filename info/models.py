@@ -1,3 +1,11 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# @Date        : 2022-06-07 14:43:48
+# @Author      : junsircoding
+# @File        : info/models.py
+# @Info        : 
+# @Last Edited : 2022-06-07 14:44:24
+
 """
 ORM 模型
 """

@@ -1,3 +1,11 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# @Date        : 2022-06-07 10:27:31
+# @Author      : junsircoding
+# @File        : info/modules/admin/views.py
+# @Info        : 
+# @Last Edited : 2022-06-07 14:44:24
+
 """
 admin 模块接口
 """
